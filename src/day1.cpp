@@ -1,23 +1,18 @@
-export module day1;
+#include "day1.hpp"
 
-import <vector>;
-import <string_view>;
-import <iostream>;
+#include <vector>
+#include <iostream>
 
-import boiler;
+void Day1::parse(std::string_view input) {
+    std::cout << input << std::endl;
+}
 
-export class Day1: AbstractDay {
-    public:
-        virtual ~Day1() = default;
-        virtual void parse(std::string_view input) override {
-            std::cout << input << std::endl;
-        }
-        virtual void part1() const override {
-            std::cout << "part1" << std::endl;
-        }
-        virtual void part2() const override {
-            std::cout << "part1" << std::endl;
-        }
-    private:
-        std::vector<int> numbers;
-};
+std::string Day1::part1() const {
+    std::cout << "part1" << std::endl;
+    return {"part1_return"};
+}
+
+std::string Day1::part2() const {
+    std::cout << "part2" << std::endl;
+    return {"part2_return"};
+}

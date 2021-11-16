@@ -1,11 +1,16 @@
-export module boiler;
+#include "boiler.hpp"
 
-import <string_view>;
-
-export class AbstractDay {
-  public:
-    virtual ~AbstractDay() = default;
-    virtual void parse(std::string_view input) = 0;
-    virtual void part1() const = 0;
-    virtual void part2() const = 0;
-};
+void run_day(int day)
+{
+    //fs::path input = "/usr";
+    //std::string d = "day" + std::to_string(day) + ".txt";
+    //input /= std::string("1");
+    //std::cout << input << std::endl; 
+    //std::cout << d << std::endl; 
+    switch(day) {
+        case 1 : std::cout << "1" << std::endl; 
+                 do_day(Day1());
+                 break;
+        default : std::cout << "no such day" << std::endl;
+    }
+}
