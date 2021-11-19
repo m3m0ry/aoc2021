@@ -9,6 +9,6 @@ while inotifywait -e modify -q -r src include inputs; do
     clear
     make
     if [ $? -eq 0 ]; then
-        ./aoc2021-GCC $1
+        ./aoc2021-GCC $1 ./inputs/day$1.txt
     fi
 done

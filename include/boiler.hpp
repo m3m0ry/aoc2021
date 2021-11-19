@@ -14,4 +14,4 @@ void do_day(T day, std::string_view input){
     std::cout << day.part2() << std::endl;
 }
 
-void run_day(int day);
+void run_day(int day, const std::string& input_file);
