@@ -9,15 +9,17 @@ void run_day(int day, const std::string& input_file)
 {
     namespace fs = std::filesystem;
     fs::path input_day = input_file;
-    std::fstream file{input_day};
-    std::stringstream stream;
-    stream << file.rdbuf();
-    std::string input = stream.str();
-    //std::string input{std::istream_iterator<char>(file), std::istream_iterator<char>()};
+    std::fstream filein{input_day};
+    std::vector<std::string> input;
+    for (std::string line; std::getline(filein, line); ) {
+        input.push_back(line);
+    }
     switch(day) {
         case 1 : std::cout << "Day 1:" << std::endl; 
-                 do_day(Day1(), input);
+                 do_day<Day1>(input);
                  break;
         default : std::cout << "no such day" << std::endl;
     }
 }
+
+
