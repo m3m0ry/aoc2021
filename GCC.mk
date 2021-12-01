@@ -1,4 +1,4 @@
-CXX = g++-10
+CXX = g++
 LINKER = $(CXX)
 
 CXXFLAGS := -O2 -Wno-format -Wall -pedantic -Wextra
