@@ -3,16 +3,17 @@ Solutions of Advent of Code 2021 in C++.
 
 ## Dependencies
 - g++-11
-- make
+- cmake
+- ninja
 - inotify-tools
 - sh
 
 ## Build
-Use `make` to compile the solutions.
-Use `make TAG=<compiler>` to specify the configuration which is in a `<compiler>.mk` file.
+Use `mkdir build` `cd build` `cmake .. -G Ninja` `cmake --build .` to compile the solution.
+The solution will be under `build/apps/aoc2021`
 
 ## Usage
-Execute `./aoc2021-<compiler>` for usage.
+Execute `aoc2021` for usage.
 
 ## Scripts
 - `workwork.sh` will compile the project, everytime there was a change in `src`, `include` or `inputs` folder.

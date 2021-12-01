@@ -1,4 +1,3 @@
-aoc2021-*
 # modules
 gcm.cache/
 
@@ -34,3 +33,6 @@ gcm.cache/
 *.exe
 *.out
 *.app
+
+# Build directory
+build/

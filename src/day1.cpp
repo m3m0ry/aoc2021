@@ -20,6 +20,7 @@ void Day1::parse(std::vector<std::string> input) {
 std::string Day1::part1() const {
     // zip_view is available in C++23 :(
     // how do I do this with views?
+    // TODO try out range-v3
     //std::vector<int> changes;
     //ranges::transform(numbers, rv::drop(numbers,1), std::back_inserter(changes), [](auto i, auto j){return j - i > 0;});
     //auto result = std::accumulate(changes.begin(), changes.end(), 0);

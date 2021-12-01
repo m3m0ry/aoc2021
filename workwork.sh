@@ -1,15 +1,19 @@
 #!/bin/sh
-if [ $# != 2 ]; then
-    echo "usage: sh workwork.sh <day> <tag>"
+if [ $# != 1 ]; then
+    echo "usage: sh workwork.sh <day>"
     echo "       day: 1-25 of Advent of Code Days"
-    echo "       tag: GCC, GCCdebug or Clang"
     exit
 fi
 
-while inotifywait -e modify -q -r src include inputs; do
+rm -rf build
+mkdir build
+cd build
+cmake .. -G Ninja
+
+while inotifywait -e modify -q -r ../src ../include ../inputs; do
     clear
-    make TAG=$2 -j 4
+    cmake --build .
     if [ $? -eq 0 ]; then
-        ./aoc2021-$2 $1 ./inputs/day$1.txt
+        ./apps/aoc2021 $1 ../inputs/day$1.txt
     fi
 done
