@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 if [ $# != 2 ]; then
     echo "usage: sh workwork.sh <day> <tag>"
     echo "       day: 1-25 of Advent of Code Days"
@@ -8,7 +8,7 @@ fi
 
 while inotifywait -e modify -q -r src include inputs; do
     clear
-    make TAG=$2
+    make TAG=$2 -j 4
     if [ $? -eq 0 ]; then
         ./aoc2021-$2 $1 ./inputs/day$1.txt
     fi
