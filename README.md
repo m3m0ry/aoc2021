@@ -19,3 +19,9 @@ Execute `aoc2021` for usage.
 - `workwork.sh` will compile the project, everytime there was a change in `src`, `include` or `inputs` folder.
 - `newday.sh` creates files for a new day. It is necessary to implement a new `case` in `src/boiler.cpp`.
 
+## TODO
+- add warnings from `GCC.mk` into `CMakeLists.txt`
+- use `clang-format`
+- use `clang-tidy`
+- use `cppcheck`
+- use GitHub's CI?

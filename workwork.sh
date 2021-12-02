@@ -10,10 +10,11 @@ mkdir build
 cd build
 cmake .. -G Ninja
 
-while inotifywait -e modify -q -r ../src ../include ../inputs; do
+while
     clear
-    cmake --build .
+    cmake --build . -j 4
     if [ $? -eq 0 ]; then
         ./apps/aoc2021 $1 ../inputs/day$1.txt
     fi
-done
+    inotifywait -e modify -q -r ../src ../include ../inputs
+do true; done

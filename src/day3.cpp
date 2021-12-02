@@ -6,11 +6,15 @@
 #include <numeric>
 #include <functional>
 
+#include <range/v3/all.hpp>
+
 #include "utils.hpp"
 #include "strutil.hpp"
 
-namespace rv = std::ranges::views;
-namespace ranges = std::ranges;
+namespace srv = std::ranges::views;
+namespace sr = std::ranges;
+namespace rv = ranges::views;
+namespace r = ranges;
 
 void Day3::parse(std::vector<std::string> input) {
     auto view = input | rv::transform(strutil::parse_string<int>);

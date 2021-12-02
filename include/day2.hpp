@@ -2,8 +2,6 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include <utility>
-#include <unordered_map>
 
 struct Day2{
     void parse(std::vector<std::string> input);

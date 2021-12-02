@@ -5,14 +5,13 @@
 #include <algorithm>
 #include <numeric>
 #include <functional>
+#include <unordered_map>
 
 #include "utils.hpp"
 #include "strutil.hpp"
 
 namespace srv = std::ranges::views;
 namespace sr = std::ranges;
-
-using namespace std::placeholders;
 
 static std::unordered_map<std::string,std::function<void(int&, int&, int)>> const table_part1 = {
     {"forward", [](int& horizontal, int& depth, int value){ horizontal += value;}},
@@ -50,5 +49,4 @@ std::string Day2::part2() const {
     };
     sr::for_each(movement, sc);
     return strutil::to_string(horizontal * depth);
-    return "";
 }
