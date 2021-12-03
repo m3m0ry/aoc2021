@@ -1,5 +1,5 @@
 #!/bin/sh
-if [ $# != 2 1; then
+if [ $# != 1 ]; then
     echo "usage: sh newday.sh <day>"
     echo "       day: 1-25 of Advent of Code Days"
     exit
