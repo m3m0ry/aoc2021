@@ -17,6 +17,7 @@ namespace sr = std::ranges;
 namespace rv = ranges::views;
 namespace r = ranges;
 
+//shamelessly copied from: https://stackoverflow.com/a/18132365/2329365
 int toInt(const std::string &s)
 {
     int n = 0;
