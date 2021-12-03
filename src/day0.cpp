@@ -18,7 +18,7 @@ namespace r = ranges;
 
 void Day0::parse(std::vector<std::string> input) {
     auto view = input | rv::transform(strutil::parse_string<int>);
-    ranges::copy(view, std::back_inserter(numbers));
+    sr::copy(view, std::back_inserter(numbers));
 }
 
 std::string Day0::part1() const {
