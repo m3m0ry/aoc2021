@@ -24,16 +24,16 @@ void run_day(int day, const std::string& input_file)
                  break;
         case 4 : do_day<Day4>(input);
                  break;
-        case 5 : do_day<Day5>(input);
-                 break;
-        case 6 : do_day<Day6>(input);
-                 break;
-        case 7 : do_day<Day7>(input);
-                 break;
-        case 8 : do_day<Day8>(input);
-                 break;
-        case 9 : do_day<Day9>(input);
-                 break;
+        //case 5 : do_day<Day5>(input);
+        //         break;
+        //case 6 : do_day<Day6>(input);
+        //         break;
+        //case 7 : do_day<Day7>(input);
+        //         break;
+        //case 8 : do_day<Day8>(input);
+        //         break;
+        //case 9 : do_day<Day9>(input);
+        //         break;
         default : std::cout << "no such day" << std::endl;
     }
 }
