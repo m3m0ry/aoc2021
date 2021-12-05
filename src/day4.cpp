@@ -48,6 +48,24 @@ int sum_unmarked(const bingo_table& bingo, const bingo_table_bool& played) {
     return result;
 }
 
+void mark_number(const bingo_table& bingo, bingo_table_bool& played, int number) {
+    for(auto i: srv::iota(0,5)){
+        for(auto j: srv::iota(0,5)){
+            if (bingo(i,j) == number)
+                played(i,j) = true;
+        }
+    }
+}
+
+bool check_winner(const bingo_table_bool& played) {
+    for(auto r: srv::iota(0,5)){
+        if(played(Eigen::all, r).count() == 5 || played(r, Eigen::all).count() == 5){
+            return true;
+        }
+    }
+    return false;
+}
+
 
 std::string Day4::part1() const {
     bingo_table_bool bools;
@@ -61,17 +79,9 @@ std::string Day4::part1() const {
         for(auto c: srv::iota(0u, bingos.size())){
             auto& bingo = bingos[c];
             auto& played = played_bingos[c];
-            for(auto i: srv::iota(0,5)){
-                for(auto j: srv::iota(0,5)){
-                    if (bingo(i,j) == n)
-                        played(i,j) = true;
-                }
-            }
-            //check winner
-            for(auto r: srv::iota(0,5)){
-                if(played(Eigen::all, r).count() == 5 || played(r, Eigen::all).count() == 5){
-                    return strutil::to_string(sum_unmarked(bingo, played)*n);
-                }
+            mark_number(bingo, played, n);
+            if(check_winner(played)){
+                return strutil::to_string(sum_unmarked(bingo, played)*n);
             }
         }
     }
@@ -88,34 +98,18 @@ std::string Day4::part2() const {
     auto bingos = this->bingos;
 
     for(auto n: numbers){
-        //play number
-        std::vector<std::size_t> to_erase;
+        auto playing = bingos.size();
         for(auto c: srv::iota(0u, bingos.size())){
             auto& bingo = bingos[c];
             auto& played = played_bingos[c];
-            for(auto i: srv::iota(0,5)){
-                for(auto j: srv::iota(0,5)){
-                    if (bingo(i,j) == n)
-                        played(i,j) = true;
-                }
-            }
-            //check winner
-            for(auto r: srv::iota(0,5)){
-                if(played(Eigen::all, r).count() == 5 || played(r, Eigen::all).count() == 5)
-                    to_erase.push_back(c);
+            mark_number(bingo, played, n);
+            //TODO why is all_of so fast and 
+            //if(sr::count_if(played_bingos, check_winner) == played_bingos.size()){ //3 seconds vs 82ms
+            // so slow???
+            if(sr::all_of(played_bingos, check_winner)){
+                return strutil::to_string(sum_unmarked(bingo, played)*n);
             }
         }
-        //check last winner
-        if(1 == bingos.size() && !to_erase.empty()){
-            show(n);
-            sr::for_each(to_erase, show<std::size_t>);
-            auto bingo = bingos.front();
-            auto played = played_bingos.front();
-            return strutil::to_string(sum_unmarked(bingo, played)*n);
-        }
-        //remove winners
-        sr::for_each(to_erase, [&bingos](auto i){bingos.erase(bingos.begin()+i);});
-        sr::for_each(to_erase, [&played_bingos](auto i){played_bingos.erase(played_bingos.begin()+i);});
     }
     return "No Last Loser!!!";
 }
