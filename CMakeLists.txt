@@ -9,7 +9,7 @@ include(FetchContent)
 add_subdirectory(src)
 
 add_subdirectory(ext/range-v3)
-FetchContent_GetProperties(range-v3)
+FetchContent_MakeAvailable(range-v3)
 
 add_library(range_v3 INTERFACE IMPORTED)
 set_target_properties(range_v3 PROPERTIES
