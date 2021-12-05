@@ -16,6 +16,8 @@ namespace sr = std::ranges;
 namespace rv = ranges::views;
 namespace r = ranges;
 
+using Eigen::seq;
+
 void Day4::parse(std::vector<std::string> input) {
     sr::transform(strutil::split(input[0], ","), std::back_inserter(numbers), strutil::parse_string<int>);
     auto bingo_chunks = input | rv::drop(1) | rv::filter([](auto s){return !s.empty();}) | rv::chunk(5);
@@ -27,17 +29,93 @@ void Day4::parse(std::vector<std::string> input) {
                 | rv::filter([](auto s){return !s.empty();}) 
                 | rv::transform([](std::string s){return strutil::parse_string<int>(s);});
             for(auto [j, n]: rv::enumerate(five_numbers)){
-                bingo[i][j] = n;
+                bingo(i,j) = n;
             }
         }
-        bingos.push_back(bingo);
+        bingos.push_back(std::move(bingo));
     }
 }
 
-std::string Day4::part1() const {
-    return "Not Implemented!!!";
+
+int sum_unmarked(const bingo_table& bingo, const bingo_table_bool& played) {
+    int result = 0;
+    for(auto i: srv::iota(0,5)){
+        for(auto j: srv::iota(0,5)){
+            if (!played(i,j))
+                result += bingo(i,j);
+        }
+    }
+    return result;
 }
 
+
+std::string Day4::part1() const {
+    bingo_table_bool bools;
+    bools.fill(false);
+    std::vector<bingo_table_bool> played_bingos;
+    sr::for_each(srv::iota(0u, bingos.size()), [&played_bingos, &bools](auto _){played_bingos.push_back(bools);});
+
+
+    for(auto n: numbers){
+        //play number
+        for(auto c: srv::iota(0u, bingos.size())){
+            auto& bingo = bingos[c];
+            auto& played = played_bingos[c];
+            for(auto i: srv::iota(0,5)){
+                for(auto j: srv::iota(0,5)){
+                    if (bingo(i,j) == n)
+                        played(i,j) = true;
+                }
+            }
+            //check winner
+            for(auto r: srv::iota(0,5)){
+                if(played(Eigen::all, r).count() == 5 || played(r, Eigen::all).count() == 5){
+                    return strutil::to_string(sum_unmarked(bingo, played)*n);
+                }
+            }
+        }
+    }
+    return "No Winner!!!";
+}
+
+
+
 std::string Day4::part2() const {
-    return "Not Implemented!!!";
+    bingo_table_bool bools;
+    bools.fill(false);
+    std::vector<bingo_table_bool> played_bingos;
+    sr::for_each(srv::iota(0u, bingos.size()), [&played_bingos, &bools](auto _){played_bingos.push_back(bools);});
+    auto bingos = this->bingos;
+
+    for(auto n: numbers){
+        //play number
+        std::vector<std::size_t> to_erase;
+        for(auto c: srv::iota(0u, bingos.size())){
+            auto& bingo = bingos[c];
+            auto& played = played_bingos[c];
+            for(auto i: srv::iota(0,5)){
+                for(auto j: srv::iota(0,5)){
+                    if (bingo(i,j) == n)
+                        played(i,j) = true;
+                }
+            }
+            //check winner
+            for(auto r: srv::iota(0,5)){
+                if(played(Eigen::all, r).count() == 5 || played(r, Eigen::all).count() == 5)
+                    to_erase.push_back(c);
+            }
+        }
+        //check last winner
+        if(1 == bingos.size() && !to_erase.empty()){
+            show(n);
+            sr::for_each(to_erase, show<std::size_t>);
+            auto bingo = bingos.front();
+            auto played = played_bingos.front();
+            return strutil::to_string(sum_unmarked(bingo, played)*n);
+        }
+        //remove winners
+        sr::for_each(to_erase, [&bingos](auto i){bingos.erase(bingos.begin()+i);});
+        sr::for_each(to_erase, [&played_bingos](auto i){played_bingos.erase(played_bingos.begin()+i);});
+    }
+    return "No Last Loser!!!";
 }

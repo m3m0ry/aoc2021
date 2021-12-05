@@ -4,7 +4,10 @@
 #include <iostream>
 #include <array>
 
-using bingo_table = std::array<std::array<int,5>,5>;
+#include <Eigen/Dense>
+
+using bingo_table = Eigen::Array<int, 5,5>;
+using bingo_table_bool = Eigen::Array<bool, 5,5>;
 
 struct Day4{
     void parse(std::vector<std::string> input);

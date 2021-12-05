@@ -6,6 +6,8 @@ include(FetchContent)
 
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 
+find_package (Eigen3 3.3 REQUIRED NO_MODULE)
+
 add_subdirectory(src)
 
 add_subdirectory(ext/range-v3)
@@ -15,5 +17,6 @@ add_library(range_v3 INTERFACE IMPORTED)
 set_target_properties(range_v3 PROPERTIES
         INTERFACE_INCLUDE_DIRECTORIES ${range-v3_SOURCE_DIR}/include)
 target_link_libraries(Library range_v3)
+target_link_libraries(Library Eigen3::Eigen)
 
 add_subdirectory(apps)
