@@ -28,8 +28,8 @@ void run_day(int day, const std::string& input_file)
                  break;
         case 6 : do_day<Day6>(input);
                  break;
-        //case 7 : do_day<Day7>(input);
-        //         break;
+        case 7 : do_day<Day7>(input);
+                 break;
         //case 8 : do_day<Day8>(input);
         //         break;
         //case 9 : do_day<Day9>(input);
