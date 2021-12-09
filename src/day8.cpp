@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <numeric>
 #include <functional>
+#include <exception>
 #include <map>
 #include <set>
 
@@ -34,67 +35,87 @@ std::string Day8::part1() const {
     return strutil::to_string(result);
 }
 
+template<typename T>
+std::set<T> intersection(const std::set<T>& a, const std::set<T>& b){
+    std::set<T> new_set;
+    sr::set_intersection(a, b, std::inserter(new_set, new_set.begin()));
+    return new_set;
+}
+
+
+template<typename T>
+std::set<T> difference(const std::set<T>& a, const std::set<T>& b){
+    std::set<T> new_set;
+    sr::set_difference(a, b, std::inserter(new_set, new_set.begin()));
+    return new_set;
+}
+
 std::string Day8::part2() const {
-    const std::vector<char> init = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
-    const std::vector<char> one = {'c', 'f'};
-    const std::vector<char> seven = {'a', 'c', 'f'};
-    const std::vector<char> four = {'b', 'c', 'd', 'f'};
+    int result = 0;
+    const std::set<char> init = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
+    const std::set<char> zero = {'a', 'b', 'c', 'e', 'f', 'g'};
+    const std::set<char> one = {'c', 'f'};
+    const std::set<char> two = {'a', 'c', 'd', 'e', 'g'};
+    const std::set<char> three = {'a', 'c', 'd', 'f', 'g'};
+    const std::set<char> four = {'b', 'c', 'd', 'f'};
+    const std::set<char> five = {'a', 'b', 'd', 'f', 'g'};
+    const std::set<char> six = {'a', 'b', 'd', 'e', 'f', 'g',};
+    const std::set<char> seven = {'a', 'c', 'f'};
+    const std::set<char> eight = init;
+    const std::set<char> nine = {'a', 'b', 'c', 'd', 'f', 'g'};
+    const std::set<char> zero_six_nine = intersection(intersection(zero, six), nine);
+    const std::set<char> two_three_five = intersection(intersection(two, three), five);
+    std::map<std::set<char>, int> set_to_number = {{zero,0},{one,1},{two,2},{three,3},{four,4},{five,5},{six,6},{seven,7},{eight,8},{nine,9}};
     for(auto i: srv::iota(0u, numbers.size())){
-        std::map<char, std::vector<char>> mapping;
-        mapping['a'] = init;
-        mapping['b'] = init;
-        mapping['c'] = init;
-        mapping['d'] = init;
-        mapping['e'] = init;
-        mapping['f'] = init;
-        mapping['g'] = init;
+        std::map<char, std::set<char>> mapping = {{'a',init},{'b',init},{'c',init},{'d',init},{'e',init},{'f',init},{'g',init}};
         auto number = numbers[i];
         auto output = outputs[i];
         for(auto n: number){
-            if(n.size() == 2){
-                std::vector<char> new_set;
-                sr::set_intersection(mapping[n[0]], one, std::inserter(new_set, new_set.begin()));
-                mapping[n[0]] = new_set;
-                new_set.clear();
-                sr::set_intersection(mapping[n[1]], one, std::inserter(new_set, new_set.begin()));
-                mapping[n[1]] = new_set;
-            }
-            else if(n.size() == 3){
-                std::vector<char> new_set;
-                sr::set_intersection(mapping[n[0]], seven, std::inserter(new_set, new_set.begin()));
-                mapping[n[0]] = new_set;
-                new_set.clear();
-                sr::set_intersection(mapping[n[1]], seven, std::inserter(new_set, new_set.begin()));
-                mapping[n[1]] = new_set;
-                new_set.clear();
-                sr::for_each(mapping[n[2]], show<char>);
-                sr::set_intersection(mapping[n[2]], seven, std::inserter(new_set, new_set.begin()));
-                sr::for_each(mapping[n[2]], show<char>);
-                mapping[n[2]] = new_set;
-            }
-            else if(n.size() == 4){
-                std::vector<char> new_set;
-                sr::set_intersection(mapping[n[0]], four, std::inserter(new_set, new_set.begin()));
-                mapping[n[0]] = new_set;
-                new_set.clear();
-                sr::set_intersection(mapping[n[1]], four, std::inserter(new_set, new_set.begin()));
-                mapping[n[1]] = new_set;
-                new_set.clear();
-                sr::set_intersection(mapping[n[2]], four, std::inserter(new_set, new_set.begin()));
-                mapping[n[2]] = new_set;
-                new_set.clear();
-                sr::set_intersection(mapping[n[3]], four, std::inserter(new_set, new_set.begin()));
-                mapping[n[3]] = new_set;
+            std::set<char> set_number;
+            if(n.size() <= 6){
+                if(n.size() == 2)
+                    set_number = one;
+                else if(n.size() == 3)
+                    set_number = seven;
+                else if(n.size() == 4)
+                    set_number = four;
+                else if(n.size() == 5)
+                    set_number = two_three_five;
+                else if(n.size() == 6)
+                    set_number = zero_six_nine;
+                if(n.size() <= 4){
+                    for(auto c: n){
+                        mapping[c] = intersection(mapping[c], set_number);
+                    }
+                }
+                for(auto c: difference(init, std::set<char>{n.begin(), n.end()})){
+                    mapping[c] = difference(mapping[c], set_number);
+                }
             }
         }
+        //apply uniques on others
         for(auto [k,v]: mapping){
-            std::cout << k << ": ";
-            for(const auto& i: v){
-                std::cout << i << ", ";
+            for(auto [l,w]: mapping){
+                if (k != l && v.size() == 1){
+                    mapping[l] = difference(w, v);
+                }
             }
-            std::cout << std::endl;
         }
-            std::cout << std::endl;
+        //create final mapping
+        std::map<char, char> final_mapping;
+        for(auto [k,v]: mapping){
+            if(v.size() != 1)
+                throw std::runtime_error("WTF");
+            final_mapping[k] = *v.begin();
+        }
+        //sum current number on result
+        int num = 0;
+        for(auto [j,o]: output | rv::reverse | rv::enumerate){
+            auto mapped = rv::transform(o, [&final_mapping](auto c){return final_mapping[c];}) | r::to<std::set<char>>;
+            num += set_to_number[mapped] * static_cast<int>(std::pow(10,j));
+        }
+
+        result += num;
     }
-    return "Not Implemented!!!";
+    return strutil::to_string(result);
 }
