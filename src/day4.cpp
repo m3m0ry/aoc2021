@@ -103,9 +103,6 @@ std::string Day4::part2() const {
             auto& bingo = bingos[c];
             auto& played = played_bingos[c];
             mark_number(bingo, played, n);
-            //TODO why is all_of so fast and 
-            //if(sr::count_if(played_bingos, check_winner) == played_bingos.size()){ //3 seconds vs 82ms
-            // so slow???
             if(sr::all_of(played_bingos, check_winner)){
                 return strutil::to_string(sum_unmarked(bingo, played)*n);
             }

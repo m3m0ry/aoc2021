@@ -36,6 +36,8 @@ void run_day(int day, const std::string& input_file)
                  break;
         case 10 : do_day<Day10>(input);
                  break;
+        case 11 : do_day<Day11>(input);
+                 break;
         default : std::cout << "no such day" << std::endl;
     }
 }
